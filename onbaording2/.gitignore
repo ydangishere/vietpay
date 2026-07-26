@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.omc/
+.DS_Store
+*.log
+static-server.*.log
+vite-preview*.log
+.env
+.env.*
