@@ -8,6 +8,7 @@ on:
       - "design-system/**"
       - "styleguide/**"
       - "design-sys-full/**"
+      - "styleanddesignsys/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -47,15 +48,23 @@ jobs:
         run: |
           mkdir -p _site/onbaording2
           cp -R onbaording2/dist/. _site/onbaording2/
-          cp -R design-system _site/
-          cp -R styleguide _site/
-          cp -R design-sys-full _site/
+
+          for static_dir in \
+            design-system \
+            styleguide \
+            design-sys-full \
+            styleanddesignsys
+          do
+            if [ -d "$static_dir" ]; then
+              cp -R "$static_dir" _site/
+            fi
+          done
 
           for page_dir in \
             _site/design-sys-full/designsystem \
             _site/design-sys-full/styleguide
           do
-            if [ ! -f "$page_dir/index.html" ]; then
+            if [ -d "$page_dir" ] && [ ! -f "$page_dir/index.html" ]; then
               html_file="$(find "$page_dir" -maxdepth 1 -type f -iname '*.html' | head -n 1)"
               if [ -n "$html_file" ]; then
                 cp "$html_file" "$page_dir/index.html"
